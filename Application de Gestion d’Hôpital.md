@@ -1,4 +1,4 @@
-# 🏥 Application de Gestion d’Hôpital
+# Application de Gestion d’Hôpital
 
 
 ## Contexte
