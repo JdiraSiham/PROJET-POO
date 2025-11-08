@@ -1,12 +1,7 @@
 # 🏥 Application de Gestion d’Hôpital
 
-![Python](https://img.shields.io/badge/Python-3.x-blue)
-![SQLite](https://img.shields.io/badge/SQLite-DATABASE-orange)
-![Tkinter](https://img.shields.io/badge/Tkinter-GUI-green)
 
----
-
-## 💡 Contexte
+## Contexte
 
 Application pour informatiser la gestion d’un petit hôpital :  
 - Suivi des patients  
@@ -15,7 +10,7 @@ Application pour informatiser la gestion d’un petit hôpital :
 
 ---
 
-## 🗄 Base de données
+## Base de données
 
 **SQLite** avec 3 tables principales :  
 
@@ -30,7 +25,7 @@ Application pour informatiser la gestion d’un petit hôpital :
 
 ---
 
-## ⚙ Fonctionnalités
+## Fonctionnalités
 
 - Ajouter / modifier / supprimer patients et médecins  
 - Programmer et gérer les rendez-vous  
@@ -40,7 +35,7 @@ Application pour informatiser la gestion d’un petit hôpital :
 
 ---
 
-## 🪟 Interface
+## Interface
 
 - Développée avec **Tkinter**  
 - Menu principal avec onglets : **Patients**, **Médecins**, **Rendez-vous**  
@@ -49,11 +44,7 @@ Application pour informatiser la gestion d’un petit hôpital :
 
 ---
 
-## 🚀 Installation
+# Présentation du Projet
 
-1. Installer **Python 3.x**  
-2. Tkinter est inclus dans Python standard, SQLite3 est intégré  
-3. Lancer le script :  
-
-```bash
-python main.py
+Voici une démonstration du projet :  
+[La vidéo de démonstration de l'interface graphique](https://drive.google.com/file/d/1Tb53-RvXZUuhe4kd59-aglkWiEveEmLm/view?usp=sharing)
