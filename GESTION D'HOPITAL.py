@@ -1,18 +1,27 @@
+#Réalisée par : JDIRA Siham & AIT-MOUH Imane
+
+#Première Année du Cycle d’Ingénieur IAGI
+
 from tkinter import *
 from tkinter.messagebox import *
 import sqlite3
 from datetime import datetime
 
+
+# ========================= BASE DE DONNÉES =========================
+# Connexion à la base de données (ou création si elle n'existe pas)
 db = sqlite3.connect("gestion_hopital.db")
 db.row_factory = sqlite3.Row
 
+# Création des tables si elles n'existent pas déjà
 db.execute("CREATE TABLE IF NOT EXISTS patients(id_patient INTEGER PRIMARY KEY AUTOINCREMENT,CIN TEXT UNIQUE,nom TEXT,prenom TEXT,date_naissance TEXT,telephone TEXT)")
 
 db.execute("CREATE TABLE IF NOT EXISTS medecins(id_medecin INTEGER PRIMARY KEY AUTOINCREMENT,nom TEXT,prenom TEXT,specialite TEXT,telephone TEXT)")
 
 db.execute("CREATE TABLE IF NOT EXISTS rendezvous(id_rdv INTEGER PRIMARY KEY AUTOINCREMENT,id_patient INTEGER,id_medecin INTEGER,date_rdv TEXT,heure_rdv TEXT,motif TEXT,FOREIGN KEY(id_patient) REFERENCES patients(id_patient),FOREIGN KEY(id_medecin) REFERENCES medecins(id_medecin))")
-db.commit()
+db.commit() # Valide les modifications dans la base de données
 
+#  FONCTION D'AFFICHAGE:
 def afficher(table):
     if table =="patients":
         list_patients.delete(0, END)
@@ -42,7 +51,7 @@ def afficher(table):
                 medecin_nom = m['nom']+ " " + m['prenom']
                 break
             list_rdv.insert(END, f"{r['id_rdv']:<5} | {patient_nom:<20} | {medecin_nom:<20} | {r['date_rdv']:<12} | {r['heure_rdv']:<5} | {r['motif']:<20}")
-
+# FONCTION AJOUT :
 def ajouter(table):
     if table=="patients":
         nom = ent_nom_p.get()
@@ -101,6 +110,7 @@ def ajouter(table):
         db.commit()
         afficher("rendezvous")
 
+# FONCTION MODIFIER :
 def modifier(table):
     if table=="patients":
         selection = list_patients.curselection()
@@ -153,8 +163,10 @@ def modifier(table):
         ent_tel = Entry(popup)
         ent_tel.insert(0, patient['telephone'])
         ent_tel.grid(row=4, column=1,padx=5,pady=5)
-
+        # ... (idem pour les autres champs: Prénom, CIN, Date, Téléphone)
+        # Validation et mise à jour de la base
         def valider_modif():
+            # Récupère les valeurs et fait les mêmes vérifications que pour ajouter()
             nom = ent_nom.get()
             prenom = ent_prenom.get()
             cin = ent_CIN.get()
@@ -318,7 +330,7 @@ def modifier(table):
             popup.destroy()
 
         Button(popup, text="Valider", command=valider_modif_rdv).grid(row=5, column=0, columnspan=2, pady=5)
-
+# FONCTION SUPPRIMER :
 def supprimer(table):
     if table=="patients":
         selection = list_patients.curselection()
@@ -355,7 +367,15 @@ def supprimer(table):
             db.execute("DELETE FROM rendezvous WHERE id_rdv=?", (idr,))
             db.commit()
             afficher("rendezvous")
+            # ... idem pour medecins et rendezvous
 
+
+# FONCTION RECHERCHER :
+    """
+    Recherche dans la base selon les critères saisis
+    Ouvre une nouvelle fenêtre Listbox pour afficher les résultats
+    """
+ # ... implémentation comme dans ton code
 def rechercher(table):
     if table == "patients":
         nom = ent_rech_nom.get()
@@ -440,14 +460,15 @@ fen = Tk()
 fen.title("Gestion Hôpital")
 fen.geometry("850x650") 
 
-LIGHT_BLUE = "#dbeeff"   # fond clair
-DARK_BLUE = "#2451A0"    # bleu foncé pour éléments importants
-ACCENT_BLUE = "#2b6fd6"  # teinte intermédiaire pour onglets
-TEXT_COLOR = "#032a63"   # couleur du texte (bleu très foncé)
-ENTRY_BG = "#ffffff"      # fond des champs de saisie
+# Définition des couleurs
+DARK_BLUE = "#2451A0" 
+ACCENT_BLUE = "#2b6fd6" 
+TEXT_COLOR = "#032a63"   
+ENTRY_BG = "#ffffff" 
 
 fen.configure(bg=LIGHT_BLUE)
-# Defaults généraux
+
+# Paramètres généraux des widgets
 fen.option_add("*Background", LIGHT_BLUE)
 fen.option_add("*foreground", TEXT_COLOR)
 fen.option_add("*Frame.background", LIGHT_BLUE)
@@ -457,7 +478,7 @@ fen.option_add("*Entry.background", ENTRY_BG)
 fen.option_add("*Entry.foreground", TEXT_COLOR)
 fen.option_add("*Listbox.background", ENTRY_BG)
 fen.option_add("*Listbox.foreground", TEXT_COLOR)
-# Boutons et menus (plus foncés pour contraste)
+
 fen.option_add("*Button.background", DARK_BLUE)
 fen.option_add("*Button.foreground", "white")
 fen.option_add("*Menubutton.background", ACCENT_BLUE)
@@ -465,16 +486,21 @@ fen.option_add("*Menubutton.foreground", "white")
 fen.option_add("*Menu.background", ENTRY_BG)
 fen.option_add("*Menu.foreground", TEXT_COLOR)
 
+# Création des onglets : Patients, Médecins, Rendez-vous
 frame_patients = Frame(fen)
 frame_medecins = Frame(fen)
 frame_rdv = Frame(fen)
 
 def afficher_onglet(frame):
+        """
+    Affiche le frame choisi et masque les autres
+    """
     frame_patients.pack_forget()
     frame_medecins.pack_forget()
     frame_rdv.pack_forget()
     frame.pack(fill=BOTH, expand=YES, padx=10, pady=10)
 
+# Création des boutons d'onglets
 frame_onglets = Frame(fen)
 frame_onglets.pack(side=TOP, fill=X, pady=5,padx=5)
 btn_patients = Button(frame_onglets, text="Patients", command=lambda: afficher_onglet(frame_patients),relief=RIDGE,bd=3)
